@@ -9,7 +9,7 @@ let props = defineProps({
 </script>
 
 <template>
-    <Head :title="'ДТП '+accident.category+' по адресу '+accident.address"/>
+    <Head :title="'ДТП ' + accident.accident_category.name +' по адресу ' + accident.info.address"/>
     <div class="accident-page text-[#18334A]">
         <AccidentMapPan :accident="accident"/>
 
@@ -17,27 +17,27 @@ let props = defineProps({
             <AccidentMainInfo :accident="accident"/>
 
             <section class="mt-8 flex flex-wrap">
-                    <div v-for="road_condition in accident['road_conditions']" class="mt-2 bg-gray-200 px-2 py-1 rounded text-sm font-medium mr-2">{{road_condition}}</div>
-                    <div v-for="weather in accident['weather']" class="mt-2 bg-gray-200 px-2 py-1 rounded text-sm font-medium mr-2">{{weather}}</div>
-                    <div class="mt-2 bg-gray-200 px-2 py-1 rounded text-sm font-medium mr-2">{{accident['light']}}</div>
+                    <div v-for="road_condition in accident.info.road_conditions" class="mt-2 bg-gray-200 px-2 py-1 rounded text-sm font-medium mr-2">{{road_condition}}</div>
+                    <div v-for="weather in accident.info.weather" class="mt-2 bg-gray-200 px-2 py-1 rounded text-sm font-medium mr-2">{{weather}}</div>
+                    <div class="mt-2 bg-gray-200 px-2 py-1 rounded text-sm font-medium mr-2">{{accident.light_conditions.name}}</div>
             </section>
 
             <section class="flex flex-wrap">
-                    <div v-for="nearby in accident['nearby']" class="mt-2 bg-gray-200 px-2 py-1 rounded text-sm font-medium mr-2">{{nearby}}</div>
+                    <div v-for="nearby in accident.info.nearby" class="mt-2 bg-gray-200 px-2 py-1 rounded text-sm font-medium mr-2">{{nearby}}</div>
             </section>
 
             <section class="flex">
-                    <div v-for="tag in accident['tags']" class="mt-2 bg-gray-200 px-2 py-1 rounded text-sm font-medium mr-2">{{tag}}</div>
+                    <div v-for="tag in accident.info.tags" class="mt-2 bg-gray-200 px-2 py-1 rounded text-sm font-medium mr-2">{{tag}}</div>
             </section>
 
             <section class="participants mb-12">
                 <h2 class="mt-10 text-2xl font-bold mb-3">Участники ДТП</h2>
 
                 <div class="flex flex-wrap">
-                    <ParticipantCard v-for="participant in accident.participants" :participant="participant"/>
+                    <ParticipantCard v-for="participant in accident.info.participants" :participant="participant"/>
                 </div>
 
-                <div v-for="vehicle in accident['vehicles']">
+                <div v-for="vehicle in accident.info.vehicles">
                     <h3 class="mt-4 text-xl font-bold mb-2">
                         {{ vehicle['brand'] ?? '--' }}, {{ vehicle['model'] ?? '--' }},
                         {{ vehicle['year'] ?? '--' }}, {{ vehicle['color'] ?? '--' }}

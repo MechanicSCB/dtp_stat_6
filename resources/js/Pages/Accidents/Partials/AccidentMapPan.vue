@@ -21,12 +21,12 @@ function toggleMapPan() {
 let accident = props.accident;
 
 onMounted(() => {
-    let coords = [accident['point']['lat'], accident['point']['long']];
+    let coords = [accident['latitude'], accident['longitude']];
     ymaps.ready(init);
 
     function init() {
         var accidentMap = new ymaps.Map('map', {
-                center: [accident['point']['lat'] + 0.0005, accident['point']['long']],
+                center: [+coords[0] + 0.0005, coords[1]],
                 zoom: 16,
                 controls: ['zoomControl'],
             }, {
@@ -38,7 +38,7 @@ onMounted(() => {
                     coordinates: coords,
                 },
                 properties: {
-                    balloonContent: accident['point']['lat'] + ', ' + accident['point']['long'],
+                    balloonContent: coords[0] + ', ' + coords[1],
                 },
             }, {
                 iconLayout: 'default#image', // Своё изображение иконки метки.
@@ -92,7 +92,7 @@ onMounted(() => {
             <div class="w-full h-full" id="map"></div>
             <div id="panorama" class="absolute top-0 w-full h-full" :class="{'invisible':!isPan}"></div>
             <div class="bottom-[18px] absolute flex w-full z-40">
-                <a :href="'/?zoom=15&lat='+accident['point']['lat']+'&lon='+accident['point']['long']" target="_blank"
+                <a :href="'/?zoom=15&lat='+accident['latitude']+'&lon='+accident['longitude']" target="_blank"
                    class="mx-auto bg-white bg-opacity-75 flex items-center space-x-1 flex-initial px-4 py-1.5 rounded-full font-medium shadow-lg">
                     <i class="material-symbols-outlined">map</i>
                     Показать ДТП рядом

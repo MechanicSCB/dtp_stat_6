@@ -27,10 +27,10 @@ class AccidentController extends Controller
 
     public function show(Accident $accident): Response|ResponseFactory
     {
-        $accidentInfo = json_decode($accident['info'], 1);
-        $accidentInfo['datetime_string'] = $accident['datetime_string'];
+        $accident->load('accident_category','light_conditions');
+        $accident['info'] = json_decode($accident['accident_info']['info']);
 
-        return inertia('Accidents/Show', ['accident' => $accidentInfo]);
+        return inertia('Accidents/Show', compact('accident'));
     }
 
     public function getRegionStat(): array
@@ -54,7 +54,7 @@ class AccidentController extends Controller
             $filter['subregion_id'] = $subregionId;
         }
 
-        Cache::flush();
+        //Cache::flush();
         $regionStat = Cache::rememberForever(json_encode($filter), fn() => $regionStatHandler->getStat($filter));
 
         return $regionStat;

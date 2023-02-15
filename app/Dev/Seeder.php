@@ -28,7 +28,7 @@ class Seeder
         $regionIds = Region::pluck('id');
         //df(tmr(@$this->start), 'seed');
         //$regionIds = $regionIds->take(5);
-        $regionIds = collect(77);
+        //$regionIds = collect(77);
         $existedRegionIds = Accident::pluck('region_id')->unique()->values()->toArray();
         //df(tmr(@$this->start), $existedRegionIds);
         //
