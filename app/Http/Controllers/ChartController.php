@@ -20,6 +20,7 @@ class ChartController extends Controller
             sort($item);
         }
 
+        //Cache::flush();
         $chartsData = Cache::rememberForever(json_encode($filter), fn() => $this->getChartsData($filter));
 
         $filterFormData = $this->getFilterFormData();
@@ -44,11 +45,11 @@ class ChartController extends Controller
         }
 
         if (@$filter['categories'] && @$filter['categories'] !== 'all') {
-            $accidents->whereIn('category', $filter['categories']);
+            $accidents->whereIn('accident_category_id', $filter['categories']);
         }
 
         if (@$filter['light_conditions'] && @$filter['light_conditions'] !== 'all') {
-            $accidents->whereIn('light_conditions', $filter['light_conditions']);
+            $accidents->whereIn('light_conditions_id', $filter['light_conditions']);
         }
 
         if (@$filter['regions'] && @$filter['regions'] !== 'all') {
@@ -56,7 +57,7 @@ class ChartController extends Controller
         }
 
         if (@$filter['subregions'] && @$filter['subregions'] !== 'all') {
-            $accidents->whereIn('subregion', $filter['subregions']);
+            $accidents->whereIn('subregion_id', $filter['subregions']);
         }
 
         return $accidents;
@@ -67,15 +68,17 @@ class ChartController extends Controller
         $filterFormData = [];
 
         $filterFormData['allYears'] = range(2022, 2015);
-        $filterFormData['allRegions'] = Region::query()->get(['id', 'name']);
+        $filterFormData['allRegions'] = Cache::rememberForever('allRegions',
+            fn() => Region::query()->get(['id', 'name'])->toArray()
+        );
         $filterFormData['allSubregions'] = Cache::rememberForever('allSubregions',
-            fn() => DB::table('accidents')->select(['region_id', 'subregion_id'])->distinct()->get()
+            fn() => DB::table('subregions')->get(['id','region_id','name'])->toArray()
         );
         $filterFormData['allCategories'] = Cache::rememberForever('allCategories',
-            fn() => DB::table('accidents')->select('accident_category_id')->distinct()->pluck('accident_category_id')
+            fn() => DB::table('accident_categories')->get(['id','name'])->toArray()
         );
         $filterFormData['allLightConditions'] = Cache::rememberForever('allLightConditions',
-            fn() => DB::table('accidents')->select('light_conditions_id')->distinct()->pluck('light_conditions_id')
+            fn() => DB::table('light_conditions')->get(['id','name'])->toArray()
         );
 
         return $filterFormData;
