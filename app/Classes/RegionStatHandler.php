@@ -53,9 +53,9 @@ class RegionStatHandler
                 $res = [];
 
                 foreach ($accidents as $accident) {
-                    $regionId = head($accident);
-                    $subregion = last($accident);
-                    $res["$regionId|$subregion"][] = 1;
+                    $regionId = $accident['region_id'];
+                    $subregionId = $accident['subregion_id'];
+                    $res["$regionId|$subregionId"][] = 1;
                 }
 
                 $res = array_map(fn($v) => count($v), $res);

@@ -23,7 +23,7 @@ defineProps({post: Object});
             {{ post.date }}
             <span v-if="post.author_name"> | {{post.author_name}} </span>
         </p>
-        <img class="mx-auto my-6 max-w-full" :src="post.image" alt="">
+        <img class="mx-auto my-6 max-w-full aspect-[3/2]" :src="post.image" alt="">
 
         <div class="flex md:flex-row flex-col">
             <div class="flex md:flex-col flex-row gap-1 h-fit md:sticky top-0 justify-center mb-3">

@@ -16,7 +16,7 @@ class PostController extends Controller
             $postsQuery->whereJsonContains('tags',$tag);
         }
 
-        $posts = $postsQuery->get();
+        $posts = $postsQuery->orderBy('id')->get();
 
         return inertia('Posts/Index', compact('posts','tag'));
     }

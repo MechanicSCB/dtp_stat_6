@@ -14,12 +14,16 @@ function excerpt(text, len = 300) {
 
     return text;
 }
+
+function getPreview(){
+
+}
 </script>
 
 <template>
     <card class="rounded-xl hover:bg-[#EBEEF0] py-3 px-4">
         <Link :href="'/posts/' + post.id">
-            <img class="rounded-xl mb-6" :src="post.image" alt="">
+            <img class="rounded-xl mb-6 aspect-[3/2]" :src="'/storage/img/posts/post'+post.id+'_prev.jpg'" alt="">
         </Link>
 
         <!-- tags -->
