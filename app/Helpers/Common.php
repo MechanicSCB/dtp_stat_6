@@ -164,3 +164,12 @@ if (! function_exists('getNonExistedInDbValues')) {
 
     }
 }
+
+if (! function_exists('isJoined')) {
+    function isJoined($query, $table):bool
+    {
+        $joins = collect($query->joins);
+
+        return $joins->pluck('table')->contains($table);
+    }
+}

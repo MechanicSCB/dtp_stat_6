@@ -43,7 +43,7 @@ class AccidentController extends Controller
             die();
         }
 
-        [$regionId, $subregionName] = explode('|', $regionSubRegion, 2);
+        [$regionId, $subregionId] = explode('|', $regionSubRegion, 2);
 
         $filter = request()->except(['bounds', 'lat', 'lon', 'region_id', 'zoom', 'subregion_name']);
         //$filter = request()->only(['period', 'participant_categories','severities','accident_categories','light_conditions]);
@@ -51,10 +51,10 @@ class AccidentController extends Controller
         $filter['region_id'] = $regionId;
 
         if ($subregionMode) {
-            $filter['subregion_name'] = $subregionName;
+            $filter['subregion_id'] = $subregionId;
         }
 
-        //Cache::flush();
+        Cache::flush();
         $regionStat = Cache::rememberForever(json_encode($filter), fn() => $regionStatHandler->getStat($filter));
 
         return $regionStat;

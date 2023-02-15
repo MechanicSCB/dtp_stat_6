@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class HotspotLayerController extends Controller
 {
-    public string $cacheMode = CacheHandler::USE_CACHE;
+    public string $cacheMode = CacheHandler::IGNORE_CACHE;
     protected string $type = 'callback';
     protected CacheHandler $cacheHandler;
     private GeoCalc $geoCalc;

@@ -6,10 +6,21 @@ namespace App\Classes;
 
 use App\Models\Accident;
 use App\Models\Region;
+use App\Models\Subregion;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class RegionStatHandler
 {
+    private array $regions;
+    private array $subregions;
+
+    public function __construct()
+    {
+        $this->regions = Cache::rememberForever('statRegions', fn() => Region::query()->pluck('name','id')->toArray());
+        $this->subregions = Cache::rememberForever('statSubregions', fn() => Subregion::query()->pluck('name','id')->toArray());
+    }
+
     public function getSubregionMode(?string $zoom): bool
     {
         $zoom = intval($zoom);
@@ -37,7 +48,7 @@ class RegionStatHandler
 
         do {
             if (($accidents = Accident::query()->where('quadkey', 'like', "$quadkey%"))->count() > 5) {
-                $accidents = $accidents->get(['region_id', 'info->region'])->toArray();
+                $accidents = $accidents->get(['region_id', 'subregion_id'])->toArray();
 
                 $res = [];
 
@@ -62,18 +73,18 @@ class RegionStatHandler
     public function getStat(array $filter): array
     {
         $regionId = $filter['region_id'];
-        $subregion = @$filter['subregion_name'];
-        $accidents = DB::table(DB::raw('accidents'));
+        $subregionId = @$filter['subregion_id'];
+        $accidents = DB::table('accidents');
         $accidents = (new AccidentFilter())->filter($accidents, $filter);
         $accidents->where('region_id', $regionId);
 
-        if ($subregion) {
-            $stat['subregion_name'] = $subregion;
-            $accidents->where('subregion', $subregion);
+        if ($subregionId) {
+            $stat['subregion_name'] = $this->subregions[$subregionId];
+            $accidents->where('subregion_id', $subregionId);
         }
 
         $stat['region_id'] = $regionId;
-        $stat['region_name'] = Region::query()->find($regionId)['name'];
+        $stat['region_name'] = $this->regions[$regionId];
         $stat['accident_count'] = $accidents->count();
         $stat['dead_count'] = $accidents->sum('dead_count');
         $stat['injured_count'] = $accidents->sum('injured_count');

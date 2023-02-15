@@ -35,14 +35,21 @@ class TileHandler
         if ($margin) {
             $fields = ['id', 'latitude', 'longitude', 'severity_id'];
         } else {
-            $fields = ['accidents.id', 'latitude', 'longitude', 'severity_id', 'datetime', 'info'];
+            $fields = ['accidents.id','accident_categories.name as accident_category_name', 'severity_id', 'datetime','dead_count','injured_count','info'];
         }
 
-        $idx = ''; //$idx = 'force index(accidents_longitude_index)';
-        $accidents = DB::table(DB::raw('accidents ' . $idx));
+        //$idx = ''; //$idx = 'force index(accidents_longitude_index)';
+        //$accidents = DB::table(DB::raw('accidents ' . $idx));
+        $accidents = DB::table('accidents');
 
         // SELECT
         $accidents->select($fields);
+
+        // JOIN ACCIDENT INFO FOR BALLOON
+        if ($margin === 0){
+            $accidents->join('accident_infos', 'accidents.id', '=', 'accident_infos.accident_id');
+            $accidents->join('accident_categories', 'accident_categories.id', '=', 'accidents.accident_category_id');
+        }
 
         // lonlat1 filter
         $lon1Range = range(truncate($bbox['long0'] - $margin, 1) * 10, truncate($bbox['long1'] + $margin, 1) * 10);

@@ -55,16 +55,16 @@ class HotspotBalloonController extends Controller
             $time = Str::beforeLast($time, ':');
             $pointListHtml .= "<a class='$active' onclick='showPointContent($id, this)'>$date</a>";
             $pointDataHtmls[$id] = "<h2>$date</h2>
-                                <h3>{$info['category']}</h3>
+                                <h3>{$accident['accident_category_name']}</h3>
                                 <div class='datetime'>$dateFormatted, $time</div>
                                 <div class='address'>{$info['address']}</div>";
 
-            if($info['injured_count']){
-                $pointDataHtmls[$id] .= "<div class='severity injured'>пострадало: {$info['injured_count']} чел.</div>";
+            if($accident['injured_count']){
+                $pointDataHtmls[$id] .= "<div class='severity injured'>пострадало: {$accident['injured_count']} чел.</div>";
             }
 
-            if($info['dead_count']){
-                $pointDataHtmls[$id] .= "<div class='severity dead'>погибло: {$info['dead_count']} чел.</div>";
+            if($accident['dead_count']){
+                $pointDataHtmls[$id] .= "<div class='severity dead'>погибло: {$accident['dead_count']} чел.</div>";
             }
 
             $pointDataHtmls[$id] .= "<a href='/accidents/$id' target='_blank'>Подробности ДТП</a>";

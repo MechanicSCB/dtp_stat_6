@@ -19,25 +19,23 @@ return new class extends Migration
             $table->string('lonlat1', 12)->nullable()->index();
             $table->decimal('latitude', 9, 6)->nullable()->index();
             $table->decimal('longitude', 9, 6)->nullable()->index();
-            $table->unsignedTinyInteger('severity_id')->nullable()->index();
+            $table->foreignId('severity_id')->index()->constrained()->onUpdate('cascade');
             $table->unsignedSmallInteger('year')->index();
             $table->dateTime('datetime')->index();
-            $table->foreignId('region_id')->index();
-            $table->string('subregion')->nullable()->index();
-            $table->string('category')->index();
+            $table->foreignId('region_id')->index()->constrained()->onUpdate('cascade');
+            $table->foreignId('subregion_id')->index()->constrained()->onUpdate('cascade');
+            $table->foreignId('accident_category_id')->index()->constrained()->onUpdate('cascade');
 
             // statistics and charts columns
             $table->unsignedInteger('dead_count')->nullable();
             $table->unsignedInteger('injured_count')->nullable();
             $table->unsignedInteger('participants_count')->nullable();
-            $table->string('light_conditions')->nullable();
+            $table->foreignId('light_conditions_id')->index()->constrained()->onUpdate('cascade');
 
             // group by columns
             $table->string('year-month',8)->index();
             $table->unsignedTinyInteger('weekday')->index();
             $table->unsignedTinyInteger('hour')->index();
-
-            $table->jsonb('info')->nullable();
 
             $table->timestamps();
         });

@@ -7,7 +7,12 @@ namespace App\Dev;
 use App\Classes\GeoCalc;
 use App\Classes\TileHandler;
 use App\Models\Accident;
+use App\Models\AccidentCategory;
+use App\Models\AccidentInfo;
+use App\Models\LightCondition;
 use App\Models\Region;
+use App\Models\Severity;
+use App\Models\Subregion;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -23,21 +28,22 @@ class Seeder
         $regionIds = Region::pluck('id');
         //df(tmr(@$this->start), 'seed');
         //$regionIds = $regionIds->take(5);
+        $regionIds = collect(77);
         $existedRegionIds = Accident::pluck('region_id')->unique()->values()->toArray();
         //df(tmr(@$this->start), $existedRegionIds);
         //
-        foreach ($regionIds as $regionId){
-            if(in_array($regionId, $existedRegionIds)){
+        foreach ($regionIds as $regionId) {
+            if (in_array($regionId, $existedRegionIds)) {
                 continue;
             }
 
-            $this->seedRegion($regionId);
+            $this->seedRegionAccidents($regionId);
         }
 
         df(tmr(@$this->start), $regionIds);
     }
 
-    public function seedRegion(int $regionId)
+    public function seedRegionAccidents(int $regionId): bool
     {
         set_time_limit(350);
         //$regionId = 50;
@@ -46,16 +52,20 @@ class Seeder
         // GET DATA FROM REGIONS JSON
         $data = $this->getDataFromRegionsJson($regionId);
         //$data = array_slice($data, 0, 40000, true);
-        //df(tmr(@$this->start), count($data));
+        //df(tmr(@$this->start), $regionId, count($data),array_slice($data, 0, 10, true));
 
         // GET ACCIDENTS ARRAY FROM DTP DATA
         $accidents = [];
-        $severities = ['Легкий' => 1, 'Тяжёлый' => 2, 'С погибшими' => 3];
+        $accidentInfos = [];
+        $severities = Severity::query()->pluck('id', 'name');
+        $subregions = Subregion::query()->where('region_id', $regionId)->pluck('id', 'name');
+        $accidentCategories = AccidentCategory::query()->pluck('id', 'name');
+        $lightConditions = LightCondition::query()->pluck('id', 'name');
 
         foreach ($data as $dtp) {
             $lat = $dtp['point']['lat'];
             $lon = $dtp['point']['long'];
-            $lonlat1 = number_format(truncate($lon,1),1).'-'.number_format(truncate($lat,1),1);
+            $lonlat1 = number_format(truncate($lon, 1), 1) . '-' . number_format(truncate($lat, 1), 1);
 
             $accidents[$dtp['id']] = [
                 'id' => $dtp['id'],
@@ -63,26 +73,35 @@ class Seeder
                 'longitude' => $lon,
                 'lonlat1' => $lonlat1,
                 'quadkey' => (new GeoCalc())->getQuadkeyFromGeoCoords($lat, $lon),
-                'severity_id' => @$severities[$dtp['severity']],
+                'severity_id' => $severities[$dtp['severity']],
                 'datetime' => $datetime = $dtp['datetime'],
-                'year' => $year = substr($datetime,0,4),
+                'year' => $year = substr($datetime, 0, 4),
                 'region_id' => $regionId,
-                'subregion' => $dtp['region'],
-                'category' => $dtp['category'],
+                'subregion_id' => $subregions[$dtp['region']],
+                'accident_category_id' => $accidentCategories[$dtp['category']],
                 'dead_count' => $dtp['dead_count'],
                 'injured_count' => $dtp['injured_count'],
                 'participants_count' => $dtp['participants_count'],
-                'light_conditions' => $dtp['light'],
-                'info' => json_encode($dtp),
-                'year-month' => $year . '-' . substr($datetime,5,2),
+                'light_conditions_id' => $lightConditions[$dtp['light']],
+                'year-month' => $year . '-' . substr($datetime, 5, 2),
                 'weekday' => Carbon::parse($dtp['datetime'])->weekday(),
-                'hour' => substr($datetime,11,2),
+                'hour' => substr($datetime, 11, 2),
             ];
+
+            $info = collect($dtp)->only(['tags', 'nearby', 'scheme', 'address', 'weather', 'vehicles', 'participants', 'road_conditions', 'participant_categories']);
+            //$info = collect($dtp)->except(['id','light','point','region','category','datetime','severity','dead_count','injured_count','parent_region','participants_count']);
+
+            $accidentInfos[$dtp['id']] = ['accident_id' => $dtp['id'], 'info' => json_encode($info)];
         }
 
         // SAVE ACCIDENTS TO DB
         foreach (array_chunk($accidents, 1000) as $chunk) {
             Accident::upsert($chunk, ['id']);
+        }
+
+        // SAVE ACCIDENT INFOS TO DB
+        foreach (array_chunk($accidentInfos, 1000) as $chunk) {
+            AccidentInfo::upsert($chunk, ['accident_id']);
         }
 
         return true;

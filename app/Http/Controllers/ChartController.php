@@ -69,13 +69,13 @@ class ChartController extends Controller
         $filterFormData['allYears'] = range(2022, 2015);
         $filterFormData['allRegions'] = Region::query()->get(['id', 'name']);
         $filterFormData['allSubregions'] = Cache::rememberForever('allSubregions',
-            fn() => DB::table('accidents')->select(['region_id', 'subregion'])->distinct()->get()
+            fn() => DB::table('accidents')->select(['region_id', 'subregion_id'])->distinct()->get()
         );
         $filterFormData['allCategories'] = Cache::rememberForever('allCategories',
-            fn() => DB::table('accidents')->select('category')->distinct()->pluck('category')
+            fn() => DB::table('accidents')->select('accident_category_id')->distinct()->pluck('accident_category_id')
         );
         $filterFormData['allLightConditions'] = Cache::rememberForever('allLightConditions',
-            fn() => DB::table('accidents')->select('light_conditions')->distinct()->pluck('light_conditions')
+            fn() => DB::table('accidents')->select('light_conditions_id')->distinct()->pluck('light_conditions_id')
         );
 
         return $filterFormData;
@@ -137,9 +137,9 @@ class ChartController extends Controller
     private function getLightConditionsChartData(Builder $filteredAccidents): array
     {
         $data = $filteredAccidents
-            ->selectRaw("count(id) as number_of_points, light_conditions")
-            ->groupBy('light_conditions')
-            ->pluck('number_of_points', 'light_conditions');
+            ->selectRaw("count(id) as number_of_points, light_conditions_id")
+            ->groupBy('light_conditions_id')
+            ->pluck('number_of_points', 'light_conditions_id');
 
         $lightConditionsChartData['labels'] = $data->keys()->toArray();
         $lightConditionsChartData['data'] = $data->values()->toArray();

@@ -22,6 +22,10 @@ class AccidentFilter
                 ->filter(fn($v) => in_array($v['id'], $filter['participant_categories']))
                 ->pluck('name');
 
+            if(! isJoined($accidents, 'accident_infos')){
+                $accidents->join('accident_infos', 'accidents.id', '=', 'accident_infos.accident_id');
+            }
+
             $accidents->where(fn($query) => $participantCategoriesNames->each(fn($v) =>
                 $query->orWhereJsonContains('info->participant_categories', $v)
             ));
@@ -32,18 +36,11 @@ class AccidentFilter
         }
 
         if (@$filter['accident_categories']) {
-            // ['2','4'] -> ['Падение пассажира', 'Столкновение']
-            $accidentCategoriesNames = collect(config('map.accidentCategories'))
-                ->filter(fn($v) => in_array($v['id'], $filter['accident_categories']))
-                ->pluck('name');
-            $accidents->whereIn('category', $accidentCategoriesNames);
+            $accidents->whereIn('accident_category_id', $filter['accident_categories']);
         }
 
         if (@$filter['light_conditions']) {
-            $accidentLightConditions= collect(config('map.lightConditions'))
-                ->filter(fn($v) => in_array($v['id'], $filter['light_conditions']))
-                ->pluck('name');
-            $accidents->whereIn('light_conditions', $accidentLightConditions);
+            $accidents->whereIn('light_conditions_id', $filter['light_conditions']);
         }
 
         if (@$filter['region']) {

@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ImageLayerController extends Controller
 {
-    public string $cacheMode = CacheHandler::USE_CACHE;
+    public string $cacheMode = CacheHandler::IGNORE_CACHE;
     public bool $returnImg = true; // true -> return image; false -> return null (for cache filler)
     protected string $imageType = 'png';
     protected TileHandler $tileHandler;
