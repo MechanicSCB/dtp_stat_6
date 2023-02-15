@@ -69,7 +69,7 @@ const confirmLeavingTeam = () => {
 };
 
 const leaveTeam = () => {
-    leaveTeamForm.delete(route('team-members.destroy', [props.team, usePage().props.auth.user]));
+    leaveTeamForm.delete(route('team-members.destroy', [props.team, usePage().props.user]));
 };
 
 const confirmTeamMemberRemoval = (teamMember) => {
@@ -134,8 +134,8 @@ const displayableRole = (role) => {
                                 v-for="(role, i) in availableRoles"
                                 :key="role.key"
                                 type="button"
-                                class="relative px-4 py-3 inline-flex w-full rounded-lg focus:z-10 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-                                :class="{'border-t border-gray-200 focus:border-none rounded-t-none': i > 0, 'rounded-b-none': i != Object.keys(availableRoles).length - 1}"
+                                class="relative px-4 py-3 inline-flex w-full rounded-lg focus:z-10 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200"
+                                :class="{'border-t border-gray-200 rounded-t-none': i > 0, 'rounded-b-none': i != Object.keys(availableRoles).length - 1}"
                                 @click="addTeamMemberForm.role = role.key"
                             >
                                 <div :class="{'opacity-50': addTeamMemberForm.role && addTeamMemberForm.role != role.key}">
@@ -249,7 +249,7 @@ const displayableRole = (role) => {
 
                                 <!-- Leave Team -->
                                 <button
-                                    v-if="$page.props.auth.user.id === user.id"
+                                    v-if="$page.props.user.id === user.id"
                                     class="cursor-pointer ml-6 text-sm text-red-500"
                                     @click="confirmLeavingTeam"
                                 >
@@ -284,8 +284,8 @@ const displayableRole = (role) => {
                             v-for="(role, i) in availableRoles"
                             :key="role.key"
                             type="button"
-                            class="relative px-4 py-3 inline-flex w-full rounded-lg focus:z-10 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-                            :class="{'border-t border-gray-200 focus:border-none rounded-t-none': i > 0, 'rounded-b-none': i !== Object.keys(availableRoles).length - 1}"
+                            class="relative px-4 py-3 inline-flex w-full rounded-lg focus:z-10 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200"
+                            :class="{'border-t border-gray-200 rounded-t-none': i > 0, 'rounded-b-none': i !== Object.keys(availableRoles).length - 1}"
                             @click="updateRoleForm.role = role.key"
                         >
                             <div :class="{'opacity-50': updateRoleForm.role && updateRoleForm.role !== role.key}">

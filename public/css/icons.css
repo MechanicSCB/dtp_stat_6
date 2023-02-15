@@ -1,0 +1,58 @@
+@font-face {
+    font-family: test;
+    src: url('/fonts/dtp.ttf') format('truetype');
+}
+
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'test' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+.icon-dtp-dead:before {
+    content: "\e906";
+    color: #e31a1c;
+}
+.icon-dtp-injured:before {
+    content: "\e907";
+    color: #f9c52e;
+}
+.icon-dtp-participants:before {
+    content: "\e908";
+}
+.icon-dtp-wheel:before {
+    content: "\e909";
+    color: #fff;
+}
+.icon-dtp-attention:before {
+    content: "\e90a";
+}
+.icon-dtp-kids:before {
+    content: "\e900";
+}
+.icon-dtp-moto:before {
+    content: "\e901";
+}
+.icon-dtp-pedestrians:before {
+    content: "\e902";
+}
+.icon-dtp-public_transport:before {
+    content: "\e903";
+}
+.icon-dtp-velo:before {
+    content: "\e904";
+}
+.icon-dtp-auto:before {
+    content: "\e905";
+}

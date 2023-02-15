@@ -1,6 +1,15 @@
 <?php
 
-use Illuminate\Foundation\Application;
+use App\Dev\CacheMassFiller;
+use App\Dev\Scraper;
+use App\Dev\Seeder;
+use App\Http\Controllers\AccidentController;
+use App\Http\Controllers\ChartController;
+use App\Http\Controllers\HotspotBalloonController;
+use App\Http\Controllers\HotspotLayerController;
+use App\Http\Controllers\ImageLayerController;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -15,15 +24,29 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+// --- DEV ROUTES
+Route::get('/scrap',  [Scraper::class, 'run']);
+Route::get('/seed',  [Seeder::class, 'seed']);
+Route::get('/cache',  [CacheMassFiller::class, 'fill']);
+// --- \DEV ROUTES
 
+
+// MAP
+Route::get('/',  [AccidentController::class, 'index']);
+Route::get('/storage/tiles/png/{req}/{z}/{x}_{y}.png', [ImageLayerController::class, 'getTileImage']);
+Route::get('/storage/tiles/hotspot/{filterKey}/{z}/{x}_{y}.js', [HotspotLayerController::class, 'getData']);
+Route::get('/get-hotspot-balloon', [HotspotBalloonController::class, 'getHotspotBalloon']);
+Route::get('/accidents/{accident}', [AccidentController::class, 'show'])->name('accidents.show');
+Route::get('/get-stat', [AccidentController::class, 'getRegionStat']);
+
+// PAGES
+Route::get('/posts', [PostController::class, 'index']);
+Route::get('/posts/{post}', [PostController::class, 'show']);
+Route::get('/charts', [ChartController::class, 'index']);
+Route::get('/download', [PageController::class, 'download']);
+Route::get('/about', [PageController::class, 'about']);
+
+// JETSTREAM
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),

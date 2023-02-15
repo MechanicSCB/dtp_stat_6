@@ -1,0 +1,97 @@
+div.balloon {
+    height: 210px;
+    z-index: 500;
+}
+
+div.balloon #point-list {
+    float: left;
+    height: 100%;
+    width: 100px;
+    overflow-x: hidden;
+    /*scrollbar-color: #6969dd #e0e0e0;*/
+    scrollbar-width: thin;
+}
+
+div.balloon #point-list a {
+    display: inline-block;
+    width: 100px;
+    color: blue;
+    line-height: 15px;
+    padding: 3px 5px;
+    border-radius: 5px 0 0 5px;
+    cursor: pointer;
+}
+
+div.balloon #point-list a:hover {
+    color: red;
+}
+
+div.balloon #point-list a.active {
+    color: #000000;
+    background-color: #ddd;
+    cursor: default;
+}
+
+div.balloon #point-content-block {
+    float: left;
+    border-left: 1px solid #ccc;
+    padding-left: 10px;
+    height: 100%;
+    width: 250px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: hsl(0 0% 50%);
+}
+
+div.balloon #point-content-block h2 {
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+div.balloon #point-content-block h3 {
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+
+div.balloon #point-content-block .datetime,
+div.balloon #point-content-block .address {
+    font-size: 9px;
+    line-height: 15px;
+    margin-bottom: 7px;
+}
+
+div.balloon #point-content-block .severity {
+    font-size: 9px;
+    line-height: 12px;
+    font-weight: bolder;
+}
+
+div.balloon #point-content-block .injured {
+    color: #FFB81F;
+}
+
+div.balloon #point-content-block .dead {
+    color: #ff0000;
+}
+
+div.balloon #point-content-block a{
+    display: inline-block;
+    margin-top: 7px;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bolder;
+    color: #18334a;
+    background-color: #ebeef0;
+    transition: color .3s ease-in-out, background .3s ease-in-out;
+}
+
+div.balloon #point-content-block a:hover{
+    background-color: #ccd2d7;;
+}
+
+div.balloon .point-content-srs {
+    display: none;
+}
