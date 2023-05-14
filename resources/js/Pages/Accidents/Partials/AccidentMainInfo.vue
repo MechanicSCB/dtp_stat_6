@@ -9,7 +9,7 @@ console.log()
     <div class="flex mt-2">
         <div class="hidden mt-[-80px] md:flex flex-none items-center py-5 px-1 h-fit  bg-white rounded-lg
         shadow-[0_0_10px_2px_rgba(200,200,200,1)] mr-8">
-            <img class="" alt="accident scheme" :src="'/storage/img/schemes/'+accident.info.scheme+'.png'">
+            <img class="max-w-[350px]" alt="accident scheme" :src="'/storage/img/schemes/'+accident.info.scheme+'.png'">
         </div>
 
         <div class="w-full">

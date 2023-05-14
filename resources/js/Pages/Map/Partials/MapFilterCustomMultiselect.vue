@@ -1,4 +1,5 @@
 <script setup>
+// TODO Fix filter after reload selected options disappearing
 import {useForm} from "@inertiajs/vue3";
 import {filter} from "../../../Stores/filterStore.js"
 import {ref} from "vue";
