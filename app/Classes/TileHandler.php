@@ -99,5 +99,4 @@ class TileHandler
 
         return $tileElements;
     }
-
 }

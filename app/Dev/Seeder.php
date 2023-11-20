@@ -30,8 +30,8 @@ class Seeder
         //$regionIds = $regionIds->take(5);
         //$regionIds = collect(77);
         $existedRegionIds = Accident::pluck('region_id')->unique()->values()->toArray();
-        //df(tmr(@$this->start), $existedRegionIds);
-        //
+
+        $this->seedRegionAccidents(1);
         foreach ($regionIds as $regionId) {
             if (in_array($regionId, $existedRegionIds)) {
                 continue;
@@ -52,7 +52,7 @@ class Seeder
         // GET DATA FROM REGIONS JSON
         $data = $this->getDataFromRegionsJson($regionId);
         //$data = array_slice($data, 0, 40000, true);
-        //df(tmr(@$this->start), $regionId, count($data),array_slice($data, 0, 10, true));
+        // df(tmr(@$this->start), $regionId, count($data),array_slice($data, 0, 10, true));
 
         // GET ACCIDENTS ARRAY FROM DTP DATA
         $accidents = [];
@@ -325,6 +325,7 @@ class Seeder
         $filepath = base_path("_backups/datas/dtp-stat-2023-01/$filename.json");
         $jsonData = file_get_contents($filepath);
         $tmp = json_decode($jsonData, 1)['features'];
+        dd(tmr(), $jsonData);
 
         foreach ($tmp as $item) {
             $data[$item['properties']['id']] = $item['properties'];

@@ -45,8 +45,9 @@ let setQueryArgsToFilterForm = () => {
 };
 
 function submit() {
+    const mimetype = 'webp';
     filter.refresh();
-    imgLayer.setTileUrlTemplate('storage/tiles/png/' + filter.key + '/%z/%x_%y.png?' + filter.queryString)
+    imgLayer.setTileUrlTemplate('storage/tiles/' + mimetype + '/' + filter.key + '/%z/%x_%y.' + mimetype + '?' + filter.queryString)
     imgLayer.update();
     hotspotSource.setTileUrlTemplate('storage/tiles/hotspot/' + filter.key + '/%z/%x_%y.js?' + filter.queryString)
     hotspotLayer.update();

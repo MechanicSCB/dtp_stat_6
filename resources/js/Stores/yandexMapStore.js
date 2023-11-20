@@ -22,7 +22,8 @@ ymaps.ready(function () {
     mainMap.controls.add('searchControl', {noPlacemark: true, float: 'none', position: {top: '5px', right: '5px'}});
 
     // IMG LAYER
-    const imgUrlTemplate = 'storage/tiles/png/' + filterKey + '/%z/%x_%y.png?' + queryString;
+    const mimetype = 'webp';
+    const imgUrlTemplate = 'storage/tiles/' + mimetype + '/' + filterKey + '/%z/%x_%y.' + mimetype + '?' + queryString;
     imgLayer = new ymaps.Layer(imgUrlTemplate, {tileTransparent: true});
 
     // HOTSPOT

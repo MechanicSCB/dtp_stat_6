@@ -13,7 +13,7 @@ use App\Models\Accident;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
-class CacheMassFiller
+class CacheMassFillerOld
 {
     protected int $threshold = 10000; // min number of tiles, than continue recursive child filling
     protected Request $filterRequest;
