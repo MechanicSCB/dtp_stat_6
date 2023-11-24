@@ -28,6 +28,7 @@ class ImageLayerController extends Controller
 
     public function getTileImage(string $filterKey, int $z, int $x, int $y, Request $request): BinaryFileResponse|null
     {
+        // dd(tmr(),77);
         [$request['z'], $request['x'], $request['y']] = [$z, $x, $y];
         $tileAccidents = $this->tileHandler->getTileAccidents($request);
         $tileNumber = $request->only('x', 'y', 'z');

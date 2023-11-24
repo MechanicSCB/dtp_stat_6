@@ -19,10 +19,10 @@
 
         <!-- Scripts -->
         <script src="{{ asset('js/balloon.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('js/getFilterCacheKey.js') }}" type="text/javascript"></script>
 
         <!-- Yandex Map -->
         <script src="https://api-maps.yandex.ru/2.1/?apikey=9a2b8ed8-161a-4324-882c-c76cfdf2357c&suggest_apikey=f2070962-bdcd-4357-b3f5-4dc62f03879e&lang=ru_RU" type="text/javascript"></script>
-
 
         @routes
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])

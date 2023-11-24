@@ -26,7 +26,7 @@ class Seeder
     public function seed()
     {
         $regionIds = Region::pluck('id');
-        //df(tmr(@$this->start), 'seed');
+        df(tmr(@$this->start), 'seed');
         //$regionIds = $regionIds->take(5);
         //$regionIds = collect(77);
         $existedRegionIds = Accident::pluck('region_id')->unique()->values()->toArray();
@@ -325,7 +325,6 @@ class Seeder
         $filepath = base_path("_backups/datas/dtp-stat-2023-01/$filename.json");
         $jsonData = file_get_contents($filepath);
         $tmp = json_decode($jsonData, 1)['features'];
-        dd(tmr(), $jsonData);
 
         foreach ($tmp as $item) {
             $data[$item['properties']['id']] = $item['properties'];

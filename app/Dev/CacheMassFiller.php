@@ -12,6 +12,7 @@ use App\Http\Controllers\ImageLayerController;
 use App\Models\Accident;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 
 class CacheMassFiller
 {
@@ -22,24 +23,24 @@ class CacheMassFiller
     public function fill()
     {
         //df(tmr(@$this->start), 'fill the cache');
-        set_time_limit(300);
-        $quadkey = '1203'; //$quadkey = '120111201300033311330002';
+        set_time_limit(900);
+        $quadkey = '1233'; //$quadkey = '120111201300033311330002';
         $filters = $this->getFilters();
-        $filters = array_slice($filters,1,1);
-        //$filters = [[]];
+        // $filters = array_slice($filters,1,1);
+        // $filters = [[]];
         //df(tmr(@$this->start), $filters);
 
         foreach ($filters as $filter){
             // make request from filter
             $this->filterRequest = $this->getFilterRequest($filter);
             $this->filterKey = $this->getFilterKey();
-            dd(tmr(),$this->filterRequest->all());
-
 
             // fill the cache with filter key
             $this->fillTileChildren($quadkey);
         }
 
+        $files = count(Storage::allFiles('public/tiles'));
+        dd(tmr(),$files);
         df(tmr(@$this->start), 'done');
     }
 

@@ -1,6 +1,6 @@
 export let mainMap, imgLayer, hotspotLayer, hotspotSource, streetLayer;
 import {getUrlParameter} from "../Functions/getUrlParameter.js";
-import {getFilterCacheKey} from "../Functions/getFilterCacheKey.js";
+// import {getFilterCacheKey} from "../Functions/getFilterCacheKey.js";
 
 let queryString = window.location.search.substring(1);
 let filterKey = getFilterCacheKey(queryString);
