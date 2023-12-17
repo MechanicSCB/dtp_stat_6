@@ -23,6 +23,9 @@ function getFilterCacheKey(requestUri) {
         if (arr[i][0] === 'accident_categories') {
             tmp['acat'] = tmp['acat'] ? tmp['acat'].concat(arr[i][1]) : arr[i][1];
         }
+        if (arr[i][0] === 'light_conditions') {
+            tmp['l_cond'] = tmp['l_cond'] ? tmp['l_cond'].concat(arr[i][1]) : arr[i][1];
+        }
     }
 
     for (const key in tmp) {
